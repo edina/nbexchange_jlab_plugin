@@ -1,8 +1,10 @@
+import datetime
 import io
 import logging
 import os
 import tarfile
 import urllib.parse
+from dateutil import parser as dateutil_parser
 from shutil import copyfile
 
 import pytest
@@ -84,7 +86,7 @@ def test_collect_methods(plugin_config, tmpdir):
         submission = {
             "student_id": student_id,
             "path": f"/submitted/{course_id}/{ass_1_3}/1/",
-            "timestamp": "2020-01-01 00:00:00.0 UTC",
+            "timestamp": "2020-01-01 00:00:00.000000 +0000",
         }
         dest_path = f"{plugin_config.CourseDirectory.submitted_directory}/123/{ass_1_3}"
         with pytest.raises(
@@ -123,7 +125,7 @@ def test_collect_normal(plugin_config, tmpdir):
                             {
                                 "student_id": student_id,
                                 "path": f"/submitted/{course_id}/{ass_1_3}/1/",
-                                "timestamp": "2020-01-01 00:00:00.0 UTC",
+                                "timestamp": "2020-01-01 00:00:00.000000 +0000",
                             }
                         ],
                     },
@@ -220,7 +222,7 @@ def test_collect_normal_update(plugin_config, tmpdir):
                             {
                                 "student_id": student_id,
                                 "path": f"/submitted/{course_id}/{ass_1_2}/1/",
-                                "timestamp": "2020-02-01 00:00:00.100",
+                                "timestamp": "2020-02-01 00:00:00.100 +0000",
                             }
                         ],
                     },
@@ -327,7 +329,7 @@ def test_collect_normal_dont_update(plugin_config, tmpdir):
                             {
                                 "student_id": student_id,
                                 "path": f"/submitted/{course_id}/{ass_1_4}/1/",
-                                "timestamp": "2020-02-01 00:00:00.100",
+                                "timestamp": "2020-02-01 00:00:00.100 +0000",
                             }
                         ],
                     },
@@ -434,7 +436,7 @@ def test_collect_normal_dont_update_old(plugin_config, tmpdir):
                             {
                                 "student_id": student_id,
                                 "path": f"/submitted/{course_id}/{ass_1_5}/1/",
-                                "timestamp": "2020-01-01 00:00:00.100",
+                                "timestamp": "2020-01-01 00:00:00.100 +0000",
                             }
                         ],
                     },
@@ -516,7 +518,7 @@ def test_collect_normal_several(plugin_config, tmpdir):
                             {
                                 "student_id": student_id,
                                 "path": f"/submitted/{course_id}/{ass_1_1}/1/",
-                                "timestamp": "2020-01-01 00:00:00.0 UTC",
+                                "timestamp": "2020-01-01 00:00:00.000000 +0000",
                             }
                         ],
                     },
@@ -568,10 +570,37 @@ def test_collect_normal_several(plugin_config, tmpdir):
             )
         )
 
+@pytest.mark.gen_test
+def test_collect_get_duedate_function_stored_string(plugin_config, tmpdir):
+    plugin_config.CourseDirectory.course_id = course_id
+    plugin_config.CourseDirectory.assignment_id = ass_1_3
+    plugin_config.CourseDirectory.submitted_directory = str(tmpdir.mkdir("submitted").realpath())
+    plugin = ExchangeCollect(coursedir=CourseDirectory(config=plugin_config), config=plugin_config)
+
+    # assume database stores duedate as a string, not a datetime object (false assumption, but for testing purposes)
+    assignment_mock = type("Assignment", (object,), {"duedate": "2020-01-01 00:00:00.000000 +0000"}) 
+    with patch.object(Gradebook, "find_assignment", return_value=assignment_mock):
+        duedate = plugin._get_duedate()
+        assert duedate == "2020-01-01 00:00:00.000000 +0000"
+
+@pytest.mark.gen_test
+def test_collect_get_duedate_function_stored_datetime(plugin_config, tmpdir):
+    plugin_config.CourseDirectory.course_id = course_id
+    plugin_config.CourseDirectory.assignment_id = ass_1_3
+    plugin_config.CourseDirectory.submitted_directory = str(tmpdir.mkdir("submitted").realpath())
+    plugin = ExchangeCollect(coursedir=CourseDirectory(config=plugin_config), config=plugin_config)
+
+    print(f"plugin.timestamp_format: {plugin.timestamp_format}")
+    now = datetime.datetime.strptime("2020-01-01 00:00:00.0 UTC", plugin.timestamp_format)
+    # assume database stores duedate as a string, not a datetime object (false assumption, but for testing purposes)
+    assignment_mock = type("Assignment", (object,), {"duedate": now})
+    with patch.object(Gradebook, "find_assignment", return_value=assignment_mock):
+        duedate = plugin._get_duedate()
+        assert duedate == "2020-01-01 00:00:00.000000 UTC"
 
 @pytest.mark.gen_test
 def test_collect_honours_duedate_expired(plugin_config, tmpdir):
-    timestamp = "2020-01-01 00:00:00.0 UTC"
+    timestamp = "2020-01-01 00:00:00.000000 +0000"
     plugin_config.CourseDirectory.course_id = course_id
     plugin_config.CourseDirectory.assignment_id = ass_1_3
     plugin_config.CourseDirectory.submitted_directory = str(tmpdir.mkdir("submitted").realpath())
@@ -628,7 +657,7 @@ def test_collect_honours_duedate_expired(plugin_config, tmpdir):
 
     with patch.object(Exchange, "api_request", side_effect=api_request):
         # Due date patched to be before timestamp in "collections" call
-        with patch.object(ExchangeCollect, "_get_duedate", return_value="2019-12-12 23:59:59.9 UTC"):
+        with patch.object(ExchangeCollect, "_get_duedate", return_value="2019-12-12 23:59:59.9 +0000"):
             plugin.start()
             assert collections and not collection
             assert not os.path.exists(
@@ -672,7 +701,7 @@ def test_collect_honours_duedate_within(plugin_config, tmpdir):
                             {
                                 "student_id": student_id,
                                 "path": f"/submitted/{course_id}/{ass_1_3}/1/",
-                                "timestamp": "2020-01-01 00:00:00.0 UTC",
+                                "timestamp": "2020-01-01 00:00:00.000000 +0000",
                             },
                         ],
                     },
@@ -746,12 +775,12 @@ def test_collect_collects_last_within_duedate(plugin_config, tmpdir):
                             {
                                 "student_id": student_id,
                                 "path": f"/submitted/{course_id}/{ass_1_3}/1/a",
-                                "timestamp": "2016-12-12 00:00:00.0 UTC",  # 1 day before
+                                "timestamp": "2016-12-12 00:00:00.0 +0000",  # 1 day before
                             },
                             {
                                 "student_id": student_id,
                                 "path": f"/submitted/{course_id}/{ass_1_3}/1/b",
-                                "timestamp": "2020-01-02 00:00:00.0 UTC",  # 1 day after
+                                "timestamp": "2020-01-02 00:00:00.0 +0000",  # 1 day after
                             },
                         ],
                     },
@@ -781,7 +810,7 @@ def test_collect_collects_last_within_duedate(plugin_config, tmpdir):
 
     with patch.object(Exchange, "api_request", side_effect=api_request):
         # Due date patched to be after timestamp in "collections" call
-        with patch.object(ExchangeCollect, "_get_duedate", return_value="2020-01-01 00:00:01.0 UTC"):
+        with patch.object(ExchangeCollect, "_get_duedate", return_value="2020-01-01 00:00:01.0 +0000"):
             plugin.start()
             assert collections and collection
 
@@ -824,7 +853,7 @@ def test_collect_normal_gradebook_called(plugin_config, tmpdir):
                                 "student_id": student_id,
                                 "full_name": "First Surname",
                                 "path": f"/submitted/{course_id}/{ass_1_3}/1/",
-                                "timestamp": "2020-01-01 00:00:00.0 UTC",
+                                "timestamp": "2020-01-01 00:00:00.000000 +0000",
                             }
                         ],
                     },
@@ -909,7 +938,7 @@ def test_collect_normal_gradebook_called_no_space(plugin_config, tmpdir):
                                 "student_id": student_id,
                                 "full_name": "First",
                                 "path": f"/submitted/{course_id}/{ass_1_3}/1/",
-                                "timestamp": "2020-01-01 00:00:00.0 UTC",
+                                "timestamp": "2020-01-01 00:00:00.000000 +0000",
                             }
                         ],
                     },
@@ -993,7 +1022,7 @@ def test_collect_normal_gradebook_called_no_full_name(plugin_config, tmpdir):
                             {
                                 "student_id": student_id,
                                 "path": f"/submitted/{course_id}/{ass_1_3}/1/",
-                                "timestamp": "2020-01-01 00:00:00.0 UTC",
+                                "timestamp": "2020-01-01 00:00:00.000000 +0000",
                             }
                         ],
                     },
@@ -1082,13 +1111,13 @@ def test_collect_normal_several_gradebook_called(plugin_config, tmpdir):
                                 "student_id": student_ids[0],
                                 "full_name": "First Surname",
                                 "path": f"/submitted/{course_id}/{ass_1_1}/1/",
-                                "timestamp": "2020-01-01 00:00:00.0 UTC",
+                                "timestamp": "2020-01-01 00:00:00.000000 +0000",
                             },
                             {
                                 "student_id": student_ids[1],
                                 "full_name": "Second Lastname",
                                 "path": f"/submitted/{course_id}/{ass_1_1}/2/",
-                                "timestamp": "2020-01-01 00:00:00.1 UTC",
+                                "timestamp": "2020-01-01 00:00:00.1 +0000",
                             },
                         ],
                     },
@@ -1165,13 +1194,13 @@ def test_collect_normal_several_full_name_none(plugin_config, tmpdir):
                                 "student_id": student_ids[0],
                                 "full_name": None,
                                 "path": f"/submitted/{course_id}/{ass_1_1}/1/",
-                                "timestamp": "2020-01-01 00:00:00.0 UTC",
+                                "timestamp": "2020-01-01 00:00:00.000000 +0000",
                             },
                             {
                                 "student_id": student_ids[1],
                                 "full_name": None,
                                 "path": f"/submitted/{course_id}/{ass_1_1}/2/",
-                                "timestamp": "2020-01-01 00:00:00.1 UTC",
+                                "timestamp": "2020-01-01 00:00:00.1 +0000",
                             },
                         ],
                     },
@@ -1231,7 +1260,7 @@ def test_collect_handles_failure_json(plugin_config, tmpdir):
                             {
                                 "student_id": student_id,
                                 "path": f"/submitted/{course_id}/{ass_1_3}/1/",
-                                "timestamp": "2020-01-01 00:00:00.0 UTC",
+                                "timestamp": "2020-01-01 00:00:00.000000 +0000",
                             }
                         ],
                     },
@@ -1284,7 +1313,7 @@ def test_collect_handles_500_failure(plugin_config, tmpdir):
                             {
                                 "student_id": student_id,
                                 "path": f"/submitted/{course_id}/{ass_1_3}/1/",
-                                "timestamp": "2020-01-01 00:00:00.0 UTC",
+                                "timestamp": "2020-01-01 00:00:00.000000 +0000",
                             }
                         ],
                     },
@@ -1390,7 +1419,7 @@ def test_collect_with_unicode(plugin_config, tmpdir):
                             {
                                 "student_id": student_id,
                                 "path": f"/submitted/{course_id}/{assignment_id}/1/",
-                                "timestamp": "2020-01-01 00:00:00.0 UTC",
+                                "timestamp": "2020-01-01 00:00:00.000000 +0000",
                             }
                         ],
                     },
@@ -1469,7 +1498,7 @@ def test_collect_with_unicode_R2L_language(plugin_config, tmpdir):
                             {
                                 "student_id": student_id,
                                 "path": f"/submitted/{course_id}/{assignment_id}/1/",
-                                "timestamp": "2020-01-01 00:00:00.0 UTC",
+                                "timestamp": "2020-01-01 00:00:00.000000 +0000",
                             }
                         ],
                     },

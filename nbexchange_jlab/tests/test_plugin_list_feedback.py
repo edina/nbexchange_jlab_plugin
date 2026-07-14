@@ -133,7 +133,7 @@ def test_list_submit_one(plugin_config, tmpdir):
                                 "notebook_id": f"{root_notebook_name}",
                             }
                         ],
-                        "timestamp": "2020-01-01 00:00:00.000000 UTC",
+                        "timestamp": "2020-01-01 00:00:00.000000 +0000",
                     }
                 ],
             }
@@ -151,8 +151,8 @@ def test_list_submit_several_submissions(plugin_config, tmpdir):
     submit_1 = deepcopy(mock_api_submit_assign_a_0_seconds)
     submit_2 = deepcopy(mock_api_submit_assign_a_0_seconds)
     submit_3 = deepcopy(mock_api_submit_assign_a_0_seconds)
-    submit_2["timestamp"] = "2020-01-01 00:00:01.000000 UTC"
-    submit_3["timestamp"] = "2020-01-01 00:00:02.000000 UTC"
+    submit_2["timestamp"] = "2020-01-01 00:00:01.000000 +0000"
+    submit_3["timestamp"] = "2020-01-01 00:00:02.000000 +0000"
 
     def api_request(*args, **kwargs):
         assert args[0] == ("assignments?course_id=no_course")
@@ -204,7 +204,7 @@ def test_list_submit_several_submissions(plugin_config, tmpdir):
                                 "notebook_id": f"{root_notebook_name}",
                             }
                         ],
-                        "timestamp": "2020-01-01 00:00:00.000000 UTC",
+                        "timestamp": "2020-01-01 00:00:00.000000 +0000",
                     },
                     {
                         "assignment_id": "assign_a",
@@ -226,7 +226,7 @@ def test_list_submit_several_submissions(plugin_config, tmpdir):
                                 "notebook_id": f"{root_notebook_name}",
                             }
                         ],
-                        "timestamp": "2020-01-01 00:00:01.000000 UTC",
+                        "timestamp": "2020-01-01 00:00:01.000000 +0000",
                     },
                     {
                         "assignment_id": "assign_a",
@@ -248,7 +248,7 @@ def test_list_submit_several_submissions(plugin_config, tmpdir):
                                 "notebook_id": f"{root_notebook_name}",
                             }
                         ],
-                        "timestamp": "2020-01-01 00:00:02.000000 UTC",
+                        "timestamp": "2020-01-01 00:00:02.000000 +0000",
                     },
                 ],
             }
@@ -260,7 +260,7 @@ def test_list_feedback_available(plugin_config, tmpdir):
     try:
         course_code = "no_course"
         assignment_id = "assign_a"
-        timestamp = "2020-01-01 00:02:00.000000 UTC"
+        timestamp = "2020-01-01 00:02:00.000000 +0000"
         plugin_config.CourseDirectory.course_id = course_code
         plugin_config.CourseDirectory.assignment_id = assignment_id
 
@@ -346,7 +346,7 @@ def test_list_feedback_available_with_path_includes_course(plugin_config, tmpdir
     try:
         course_code = "no_course"
         assignment_id = "assign_a"
-        timestamp = "2020-01-01 00:02:00.000000 UTC"
+        timestamp = "2020-01-01 00:02:00.000000 +0000"
         plugin_config.CourseDirectory.course_id = course_code
         plugin_config.CourseDirectory.assignment_id = assignment_id
 
@@ -441,11 +441,11 @@ def test_list_with_5_submit_and_3_feedback(plugin_config, tmpdir):
         plugin_config.ExchangeList.inbound = True
         plugin_config.Exchange.path_includes_course = True
 
-        submit_timestamp1 = "2020-01-01 00:00:01.000000 UTC"
-        submit_timestamp2 = "2020-01-01 00:00:02.000000 UTC"
-        submit_timestamp3 = "2020-01-01 00:00:03.000000 UTC"
-        submit_timestamp4 = "2020-01-01 00:00:04.000000 UTC"
-        submit_timestamp5 = "2020-01-01 00:00:05.000000 UTC"
+        submit_timestamp1 = "2020-01-01 00:00:01.000000 +0000"
+        submit_timestamp2 = "2020-01-01 00:00:02.000000 +0000"
+        submit_timestamp3 = "2020-01-01 00:00:03.000000 +0000"
+        submit_timestamp4 = "2020-01-01 00:00:04.000000 +0000"
+        submit_timestamp5 = "2020-01-01 00:00:05.000000 +0000"
         assignment_dir = f"{course_code}/{assignment_id}"
         feedback_dir1 = f"{assignment_dir}/feedback/{submit_timestamp2}"
 
@@ -677,7 +677,7 @@ def test_list_feedback_available_but_second_notebook_has_no_feedback(plugin_conf
     try:
         course_code = "no_course"
         assignment_id = "assign_a"
-        timestamp = "2020-01-01 00:02:00.000000 UTC"
+        timestamp = "2020-01-01 00:02:00.000000 +0000"
         plugin_config.CourseDirectory.course_id = course_code
         plugin_config.CourseDirectory.assignment_id = assignment_id
 

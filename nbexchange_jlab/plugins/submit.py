@@ -57,11 +57,14 @@ class ExchangeSubmit(ABCExchangeSubmit, NBExchange):
 
         # validate timestamp
         timestamp = self.check_timezone(parser.parse(timestamp)).strftime(self.timestamp_format)
-
         files = {"assignment": ("assignment.tar.gz", file)}
         try:
             r = self.api_request(
-                f"submission?course_id={quote_plus(self.coursedir.course_id)}&assignment_id={quote_plus(self.coursedir.assignment_id)}&timestamp={quote_plus(timestamp)}",  # noqa: E501
+                '&'.join([
+                    f"submission?course_id={quote_plus(self.coursedir.course_id)}",
+                    f"assignment_id={quote_plus(self.coursedir.assignment_id)}",
+                    f"timestamp={quote_plus(timestamp)}"
+                    ]),
                 method="POST",
                 files=files,
             )
