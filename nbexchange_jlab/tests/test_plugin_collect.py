@@ -4,7 +4,6 @@ import logging
 import os
 import tarfile
 import urllib.parse
-from dateutil import parser as dateutil_parser
 from shutil import copyfile
 
 import pytest
@@ -570,6 +569,7 @@ def test_collect_normal_several(plugin_config, tmpdir):
             )
         )
 
+
 @pytest.mark.gen_test
 def test_collect_get_duedate_function_stored_string(plugin_config, tmpdir):
     plugin_config.CourseDirectory.course_id = course_id
@@ -578,10 +578,11 @@ def test_collect_get_duedate_function_stored_string(plugin_config, tmpdir):
     plugin = ExchangeCollect(coursedir=CourseDirectory(config=plugin_config), config=plugin_config)
 
     # assume database stores duedate as a string, not a datetime object (false assumption, but for testing purposes)
-    assignment_mock = type("Assignment", (object,), {"duedate": "2020-01-01 00:00:00.000000 +0000"}) 
+    assignment_mock = type("Assignment", (object,), {"duedate": "2020-01-01 00:00:00.000000 +0000"})
     with patch.object(Gradebook, "find_assignment", return_value=assignment_mock):
         duedate = plugin._get_duedate()
         assert duedate == "2020-01-01 00:00:00.000000 +0000"
+
 
 @pytest.mark.gen_test
 def test_collect_get_duedate_function_stored_datetime(plugin_config, tmpdir):
@@ -597,6 +598,7 @@ def test_collect_get_duedate_function_stored_datetime(plugin_config, tmpdir):
     with patch.object(Gradebook, "find_assignment", return_value=assignment_mock):
         duedate = plugin._get_duedate()
         assert duedate == "2020-01-01 00:00:00.000000 UTC"
+
 
 @pytest.mark.gen_test
 def test_collect_honours_duedate_expired(plugin_config, tmpdir):

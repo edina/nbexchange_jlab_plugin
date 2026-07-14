@@ -1,10 +1,7 @@
-import datetime
 import json
 import os
 import shutil
-from dateutil import parser as dateutil_parser
 from urllib.parse import quote_plus
-from zoneinfo import ZoneInfo
 
 import requests
 from nbgrader.api import Gradebook, MissingEntry
@@ -33,7 +30,6 @@ class ExchangeCollect(ABCExchangeCollect, NBExchange):
         if not response["success"]:
             self.log.error(f"Collect download failed: {response['value']}")
             self.fail(f"Collect download failed: {response['value']}")
-
 
     # Note: this function needs to convert a datetime to a string in the same format as the timestamp_format, so
     # that it can be compared with the submission timestamp from the exchange server.

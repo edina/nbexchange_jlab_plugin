@@ -60,11 +60,13 @@ class ExchangeSubmit(ABCExchangeSubmit, NBExchange):
         files = {"assignment": ("assignment.tar.gz", file)}
         try:
             r = self.api_request(
-                '&'.join([
-                    f"submission?course_id={quote_plus(self.coursedir.course_id)}",
-                    f"assignment_id={quote_plus(self.coursedir.assignment_id)}",
-                    f"timestamp={quote_plus(timestamp)}"
-                    ]),
+                "&".join(
+                    [
+                        f"submission?course_id={quote_plus(self.coursedir.course_id)}",
+                        f"assignment_id={quote_plus(self.coursedir.assignment_id)}",
+                        f"timestamp={quote_plus(timestamp)}",
+                    ]
+                ),
                 method="POST",
                 files=files,
             )
