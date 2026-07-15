@@ -1,6 +1,6 @@
 [tools]
-node = "18"
-python = "3.12"
+node = "24"
+python = "3.13"
 
 [env]
 NAAS_BASE_URL = "http://localhost:9000/"
