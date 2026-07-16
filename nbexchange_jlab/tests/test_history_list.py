@@ -23,32 +23,32 @@ mocked_json_response = {
                     "actions": [
                         {
                             "action": "AssignmentActions.released",
-                            "timestamp": "2022-01-17 15:51:44.809328 UTC",
+                            "timestamp": "2022-01-17 15:51:44.809328 +0000",
                             "user": "1-kiz",
                         },
                         {
                             "action": "AssignmentActions.fetched",
-                            "timestamp": "2022-01-17 15:51:52.621861 UTC",
+                            "timestamp": "2022-01-17 15:51:52.621861 +0000",
                             "user": "1-kiz",
                         },
                         {
                             "action": "AssignmentActions.submitted",
-                            "timestamp": "2022-01-17 15:53:11.064558 UTC",
+                            "timestamp": "2022-01-17 15:53:11.064558 +0000",
                             "user": "1-kiz",
                         },
                         {
                             "action": "AssignmentActions.collected",
-                            "timestamp": "2022-01-17 15:53:18.915705 UTC",
+                            "timestamp": "2022-01-17 15:53:18.915705 +0000",
                             "user": "1-kiz",
                         },
                         {
                             "action": "AssignmentActions.feedback_released",
-                            "timestamp": "2022-01-17 15:54:34.539665 UTC",
+                            "timestamp": "2022-01-17 15:54:34.539665 +0000",
                             "user": "1-kiz",
                         },
                         {
                             "action": "AssignmentActions.feedback_fetched",
-                            "timestamp": "2022-01-17 15:54:43.010072 UTC",
+                            "timestamp": "2022-01-17 15:54:43.010072 +0000",
                             "user": "1-kiz",
                         },
                     ],

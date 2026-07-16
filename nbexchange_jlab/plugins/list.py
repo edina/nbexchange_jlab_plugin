@@ -206,7 +206,7 @@ class ExchangeList(ABCExchangeList, NBExchange):
                 else:
                     latest = held_assignments["released"].get(
                         assignment.get("assignment_id"),
-                        {"timestamp": "1990-01-01 00:00:00 UTC"},
+                        {"timestamp": "1990-01-01 00:00:00 +0000"},
                     )
                     if assignment.get("timestamp") >= latest.get("timestamp"):
                         held_assignments["released"][assignment.get("assignment_id")] = assignment

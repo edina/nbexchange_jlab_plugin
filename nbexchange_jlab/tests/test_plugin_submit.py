@@ -85,7 +85,7 @@ def test_submit_methods(plugin_config, tmpdir, caplog):
                                         "feedback_timestamp": False,
                                     }
                                 ],
-                                "timestamp": "2020-01-01 00:00:00.000000 UTC",
+                                "timestamp": "2020-01-01 00:00:00.000000 +0000",
                             }
                         ],
                     }
@@ -117,7 +117,7 @@ def test_submit_methods(plugin_config, tmpdir, caplog):
                                         "feedback_timestamp": False,
                                     }
                                 ],
-                                "timestamp": "2020-01-01 00:00:00.000000 UTC",
+                                "timestamp": "2020-01-01 00:00:00.000000 +0000",
                             }
                         ],
                     }
@@ -175,7 +175,7 @@ def test_submit_single_item(plugin_config, tmpdir):
                                                 "feedback_timestamp": False,
                                             }
                                         ],
-                                        "timestamp": "2020-01-01 00:00:00.000000 UTC",
+                                        "timestamp": "2020-01-01 00:00:00.000000 +0000",
                                     }
                                 ],
                             }
@@ -250,7 +250,7 @@ def test_submit_single_item_with_path_includes_course(plugin_config, tmpdir):
                                                 "feedback_timestamp": False,
                                             }
                                         ],
-                                        "timestamp": "2020-01-01 00:00:00.000000 UTC",
+                                        "timestamp": "2020-01-01 00:00:00.000000 +0000",
                                     }
                                 ],
                             }
@@ -323,7 +323,7 @@ def test_submit_fail(plugin_config, tmpdir):
                                                 "feedback_timestamp": False,
                                             }
                                         ],
-                                        "timestamp": "2020-01-01 00:00:00.000000 UTC",
+                                        "timestamp": "2020-01-01 00:00:00.000000 +0000",
                                     }
                                 ],
                             }
@@ -397,7 +397,7 @@ def test_submit_multiple_notebooks_in_assignment(plugin_config, tmpdir):
                                                 "feedback_timestamp": False,
                                             },
                                         ],
-                                        "timestamp": "2020-01-01 00:00:00.000000 UTC",
+                                        "timestamp": "2020-01-01 00:00:00.000000 +0000",
                                     }
                                 ],
                             }
@@ -467,7 +467,7 @@ def test_submit_fail_no_folder(plugin_config, tmpdir):
                                             "feedback_timestamp": False,
                                         }
                                     ],
-                                    "timestamp": "2020-01-01 00:00:00.000000 UTC",
+                                    "timestamp": "2020-01-01 00:00:00.000000 +0000",
                                 }
                             ],
                         }
@@ -535,7 +535,7 @@ def test_submit_warning_no_notebook(plugin_config, tmpdir):
                                                 "feedback_timestamp": False,
                                             }
                                         ],
-                                        "timestamp": "2020-01-01 00:00:00.000000 UTC",
+                                        "timestamp": "2020-01-01 00:00:00.000000 +0000",
                                     }
                                 ],
                             }
@@ -615,7 +615,7 @@ def test_submit_warning_wrong_notebook(plugin_config, tmpdir):
                                                 "feedback_timestamp": False,
                                             }
                                         ],
-                                        "timestamp": "2020-01-01 00:00:00.000000 UTC",
+                                        "timestamp": "2020-01-01 00:00:00.000000 +0000",
                                     }
                                 ],
                             }
@@ -694,7 +694,7 @@ def test_submit_no_notebook_strict_means_fail(plugin_config, tmpdir):
                                                 "feedback_timestamp": False,
                                             }
                                         ],
-                                        "timestamp": "2020-01-01 00:00:00.000000 UTC",
+                                        "timestamp": "2020-01-01 00:00:00.000000 +0000",
                                     }
                                 ],
                             }
@@ -773,7 +773,7 @@ def test_submit_wrong_notebook_strict_means_fail(plugin_config, tmpdir):
                                                 "feedback_timestamp": False,
                                             }
                                         ],
-                                        "timestamp": "2020-01-01 00:00:00.000000 UTC",
+                                        "timestamp": "2020-01-01 00:00:00.000000 +0000",
                                     }
                                 ],
                             }
@@ -853,7 +853,7 @@ def test_submit_warning_wrong_notebook_two(plugin_config, tmpdir):
                                                 "feedback_timestamp": False,
                                             }
                                         ],
-                                        "timestamp": "2020-01-01 00:00:00.000000 UTC",
+                                        "timestamp": "2020-01-01 00:00:00.000000 +0000",
                                     }
                                 ],
                             }
@@ -935,7 +935,7 @@ def test_submit_extra_notebook_strict_means_fail(plugin_config, tmpdir):
                                                 "feedback_timestamp": False,
                                             }
                                         ],
-                                        "timestamp": "2020-01-01 00:00:00.000000 UTC",
+                                        "timestamp": "2020-01-01 00:00:00.000000 +0000",
                                     }
                                 ],
                             }
@@ -1012,7 +1012,7 @@ def test_submit_two_releases_newest_first(plugin_config, tmpdir):
                                                 "feedback_timestamp": False,
                                             }
                                         ],
-                                        "timestamp": "2020-01-01 00:01:00.000000 UTC",
+                                        "timestamp": "2020-01-01 00:01:00.000000 +0000",
                                     },
                                     {
                                         "assignment_id": assignment_id1,
@@ -1028,7 +1028,7 @@ def test_submit_two_releases_newest_first(plugin_config, tmpdir):
                                                 "feedback_timestamp": False,
                                             }
                                         ],
-                                        "timestamp": "2020-01-01 00:00:00.000000 UTC",
+                                        "timestamp": "2020-01-01 00:00:00.000000 +0000",
                                     },
                                 ],
                             }
@@ -1101,7 +1101,7 @@ def test_submit_two_releases_newest_last(plugin_config, tmpdir):
                                                 "feedback_timestamp": False,
                                             }
                                         ],
-                                        "timestamp": "2020-01-01 00:00:00.000000 UTC",
+                                        "timestamp": "2020-01-01 00:00:00.000000 +0000",
                                     },
                                     {
                                         "assignment_id": assignment_id1,
@@ -1117,7 +1117,7 @@ def test_submit_two_releases_newest_last(plugin_config, tmpdir):
                                                 "feedback_timestamp": False,
                                             }
                                         ],
-                                        "timestamp": "2020-01-01 00:01:00.000000 UTC",
+                                        "timestamp": "2020-01-01 00:01:00.000000 +0000",
                                     },
                                 ],
                             }
@@ -1190,7 +1190,7 @@ def test_submit_warning_wrong_notebook_three(plugin_config, tmpdir):
                                                 "feedback_timestamp": False,
                                             }
                                         ],
-                                        "timestamp": "2020-01-01 00:00:00.000000 UTC",
+                                        "timestamp": "2020-01-01 00:00:00.000000 +0000",
                                     },
                                     {
                                         "assignment_id": assignment_id1,
@@ -1206,7 +1206,7 @@ def test_submit_warning_wrong_notebook_three(plugin_config, tmpdir):
                                                 "feedback_timestamp": False,
                                             }
                                         ],
-                                        "timestamp": "2020-01-01 00:01:00.000000 UTC",
+                                        "timestamp": "2020-01-01 00:01:00.000000 +0000",
                                     },
                                 ],
                             }
@@ -1284,7 +1284,7 @@ def test_submit_with_multiple_assignments_newest_first(plugin_config, tmpdir):
                                                 "feedback_timestamp": None,
                                             }
                                         ],
-                                        "timestamp": "2020-03-02 11:58:27.500000 UTC",
+                                        "timestamp": "2020-03-02 11:58:27.500000 +0000",
                                     },
                                     {
                                         "assignment_id": assignment_id3,
@@ -1300,7 +1300,7 @@ def test_submit_with_multiple_assignments_newest_first(plugin_config, tmpdir):
                                                 "feedback_timestamp": None,
                                             }
                                         ],
-                                        "timestamp": "2020-03-02 08:26:01.400000 UTC",
+                                        "timestamp": "2020-03-02 08:26:01.400000 +0000",
                                     },
                                     {
                                         "assignment_id": assignment_id3,
@@ -1316,7 +1316,7 @@ def test_submit_with_multiple_assignments_newest_first(plugin_config, tmpdir):
                                                 "feedback_timestamp": None,
                                             }
                                         ],
-                                        "timestamp": "2020-03-02 08:07:28.61.000000 UTC",
+                                        "timestamp": "2020-03-02 08:07:28.61.000000 +0000",
                                     },
                                     {
                                         "assignment_id": assignment_id3,
@@ -1332,7 +1332,7 @@ def test_submit_with_multiple_assignments_newest_first(plugin_config, tmpdir):
                                                 "feedback_timestamp": None,
                                             }
                                         ],
-                                        "timestamp": "2020-03-02 07:20:37.7.000000 UTC",
+                                        "timestamp": "2020-03-02 07:20:37.7.000000 +0000",
                                     },
                                     {
                                         "assignment_id": assignment_id3,
@@ -1348,7 +1348,7 @@ def test_submit_with_multiple_assignments_newest_first(plugin_config, tmpdir):
                                                 "feedback_timestamp": None,
                                             }
                                         ],
-                                        "timestamp": "2020-03-02 07:20:32.300000 UTC",
+                                        "timestamp": "2020-03-02 07:20:32.300000 +0000",
                                     },
                                     {
                                         "assignment_id": assignment_id3,
@@ -1364,7 +1364,7 @@ def test_submit_with_multiple_assignments_newest_first(plugin_config, tmpdir):
                                                 "feedback_timestamp": None,
                                             }
                                         ],
-                                        "timestamp": "2020-03-01 12:56:44.600000 UTC",
+                                        "timestamp": "2020-03-01 12:56:44.600000 +0000",
                                     },
                                     {
                                         "assignment_id": "assign_1_3",
@@ -1380,7 +1380,7 @@ def test_submit_with_multiple_assignments_newest_first(plugin_config, tmpdir):
                                                 "feedback_timestamp": None,
                                             },
                                         ],
-                                        "timestamp": "2020-03-01 10:45:49.900000 UTC",
+                                        "timestamp": "2020-03-01 10:45:49.900000 +0000",
                                     },
                                     {
                                         "assignment_id": assignment_id1,
@@ -1420,7 +1420,7 @@ def test_submit_with_multiple_assignments_newest_first(plugin_config, tmpdir):
                                                 "feedback_timestamp": None,
                                             },
                                         ],
-                                        "timestamp": "2020-01-01 10:45:49.900000 UTC",
+                                        "timestamp": "2020-01-01 10:45:49.900000 +0000",
                                     },
                                 ],
                             }
@@ -1515,7 +1515,7 @@ def test_submit_with_multiple_assignments_oldest_first(plugin_config, tmpdir):
                                                 "feedback_timestamp": None,
                                             },
                                         ],
-                                        "timestamp": "2020-01-01 10:45:49.900000 UTC",
+                                        "timestamp": "2020-01-01 10:45:49.900000 +0000",
                                     },
                                     {
                                         "assignment_id": assignment_id3,
@@ -1531,7 +1531,7 @@ def test_submit_with_multiple_assignments_oldest_first(plugin_config, tmpdir):
                                                 "feedback_timestamp": None,
                                             }
                                         ],
-                                        "timestamp": "2020-03-02 11:58:27.500000 UTC",
+                                        "timestamp": "2020-03-02 11:58:27.500000 +0000",
                                     },
                                     {
                                         "assignment_id": assignment_id3,
@@ -1547,7 +1547,7 @@ def test_submit_with_multiple_assignments_oldest_first(plugin_config, tmpdir):
                                                 "feedback_timestamp": None,
                                             }
                                         ],
-                                        "timestamp": "2020-03-02 08:26:01.400000 UTC",
+                                        "timestamp": "2020-03-02 08:26:01.400000 +0000",
                                     },
                                     {
                                         "assignment_id": assignment_id3,
@@ -1563,7 +1563,7 @@ def test_submit_with_multiple_assignments_oldest_first(plugin_config, tmpdir):
                                                 "feedback_timestamp": None,
                                             }
                                         ],
-                                        "timestamp": "2020-03-02 08:07:28.610000 UTC",
+                                        "timestamp": "2020-03-02 08:07:28.610000 +0000",
                                     },
                                     {
                                         "assignment_id": assignment_id3,
@@ -1579,7 +1579,7 @@ def test_submit_with_multiple_assignments_oldest_first(plugin_config, tmpdir):
                                                 "feedback_timestamp": None,
                                             }
                                         ],
-                                        "timestamp": "2020-03-02 07:20:37.700000 UTC",
+                                        "timestamp": "2020-03-02 07:20:37.700000 +0000",
                                     },
                                     {
                                         "assignment_id": assignment_id3,
@@ -1595,7 +1595,7 @@ def test_submit_with_multiple_assignments_oldest_first(plugin_config, tmpdir):
                                                 "feedback_timestamp": None,
                                             }
                                         ],
-                                        "timestamp": "2020-03-02 07:20:32.300000 UTC",
+                                        "timestamp": "2020-03-02 07:20:32.300000 +0000",
                                     },
                                     {
                                         "assignment_id": assignment_id3,
@@ -1611,7 +1611,7 @@ def test_submit_with_multiple_assignments_oldest_first(plugin_config, tmpdir):
                                                 "feedback_timestamp": None,
                                             }
                                         ],
-                                        "timestamp": "2020-03-01 12:56:44.600000 UTC",
+                                        "timestamp": "2020-03-01 12:56:44.600000 +0000",
                                     },
                                     {
                                         "assignment_id": "assign_1_3",
@@ -1627,7 +1627,7 @@ def test_submit_with_multiple_assignments_oldest_first(plugin_config, tmpdir):
                                                 "feedback_timestamp": None,
                                             },
                                         ],
-                                        "timestamp": "2020-03-01 10:45:49.900000 UTC",
+                                        "timestamp": "2020-03-01 10:45:49.900000 +0000",
                                     },
                                 ],
                             }
@@ -1720,7 +1720,7 @@ def test_submit_honours_ignore_lost(plugin_config, tmpdir):
                                                 "feedback_timestamp": False,
                                             }
                                         ],
-                                        "timestamp": "2020-01-01 00:00:00.000000 UTC",
+                                        "timestamp": "2020-01-01 00:00:00.000000 +0000",
                                     }
                                 ],
                             }
@@ -1798,7 +1798,7 @@ def test_submit_reducing_max_buffer_size_honoured(plugin_config, tmpdir):
                                                 "feedback_timestamp": False,
                                             }
                                         ],
-                                        "timestamp": "2020-01-01 00:00:00.000000 UTC",
+                                        "timestamp": "2020-01-01 00:00:00.000000 +0000",
                                     }
                                 ],
                             }
@@ -1873,7 +1873,7 @@ def test_release_105MB_not_blocked(plugin_config, tmpdir):
                                                 "feedback_timestamp": False,
                                             }
                                         ],
-                                        "timestamp": "2020-01-01 00:00:00.000000 UTC",
+                                        "timestamp": "2020-01-01 00:00:00.000000 +0000",
                                     }
                                 ],
                             }
@@ -1950,7 +1950,7 @@ def test_release_5point1GB_is_blocked__long_test(plugin_config, tmpdir):
                                                 "feedback_timestamp": False,
                                             }
                                         ],
-                                        "timestamp": "2020-01-01 00:00:00.000000 UTC",
+                                        "timestamp": "2020-01-01 00:00:00.000000 +0000",
                                     }
                                 ],
                             }
@@ -2033,7 +2033,7 @@ def test_submit_exchange_failure_code(plugin_config, tmpdir, caplog):
                                                 "feedback_timestamp": False,
                                             }
                                         ],
-                                        "timestamp": "2020-01-01 00:00:00.000000 UTC",
+                                        "timestamp": "2020-01-01 00:00:00.000000 +0000",
                                     }
                                 ],
                             }

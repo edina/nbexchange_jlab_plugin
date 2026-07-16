@@ -1,6 +1,6 @@
 {
     "name": "nbexchange_jlab",
-    "version": "2.0.2",
+    "version": "2.0.3",
     "description": "A JupyterLab extension to add Noteable Look and Feel",
     "keywords": [
         "jupyter",
@@ -16,6 +16,13 @@
         "name": "wpetit",
         "email": "wpetit@ed.ac.uk"
     },
+    "contributors": [
+        "Ian Stuart <Ian.Stuart@ed.ac.uk>",
+        "Alasdair Macleod <alasdair.j.macleod@ed.ac.uk>",
+        "Callum Fenna-Roberts",
+        "Ludvig Kihlman",
+        "Bert Robberechts"
+    ],
     "files": [
         "lib/**/*.{d.ts,eot,gif,html,jpg,js,js.map,json,png,svg,woff2,ttf}",
         "style/**/*.{css,js,eot,gif,html,jpg,json,png,svg,woff2,ttf}",
@@ -32,8 +39,8 @@
     "scripts": {
         "build": "jlpm build:lib && jlpm build:labextension:dev",
         "build:prod": "jlpm clean && jlpm build:lib:prod && jlpm build:labextension",
-        "build:labextension": "jupyter labextension build .",
-        "build:labextension:dev": "jupyter labextension build --development True .",
+        "build:labextension": "jupyter-builder build .",
+        "build:labextension:dev": "jupyter-builder build --development True .",
         "build:lib": "tsc --sourceMap",
         "build:lib:prod": "tsc",
         "clean": "jlpm clean:lib",

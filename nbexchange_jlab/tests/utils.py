@@ -75,7 +75,7 @@ user_lkihlman_student = {
 }
 
 root_notebook_name = "assignment-0.6"
-timestamp = "2020-01-01 00:00:00.000000 UTC"
+timestamp = "2020-01-01 00:00:00.000000 +0000"
 
 mock_api_released_assign_a_0_seconds = {
     "assignment_id": "assign_a",

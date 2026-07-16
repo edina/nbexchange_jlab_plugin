@@ -76,7 +76,7 @@ def test_list_normal(plugin_config, tmpdir):
                     }
                 ],
                 "path": "released/1/assign_a/foo",
-                "timestamp": "2020-01-01 00:00:00.000000 UTC",
+                "timestamp": "2020-01-01 00:00:00.000000 +0000",
             }
         ]
 
@@ -128,7 +128,7 @@ def test_list_normal_multiple_assignments(plugin_config, tmpdir):
                     }
                 ],
                 "path": "released/1/assign_a/foo",
-                "timestamp": "2020-01-01 00:00:00.000000 UTC",
+                "timestamp": "2020-01-01 00:00:00.000000 +0000",
             },
             {
                 "assignment_id": "assign_b",
@@ -144,7 +144,7 @@ def test_list_normal_multiple_assignments(plugin_config, tmpdir):
                     }
                 ],
                 "path": "released/1/assign_b/foo",
-                "timestamp": "2020-01-01 00:00:00.000000 UTC",
+                "timestamp": "2020-01-01 00:00:00.000000 +0000",
             },
         ]
 
@@ -161,7 +161,7 @@ def test_list_normal_multiple_release_same_assignment(plugin_config, tmpdir):
         release_1 = deepcopy(mock_api_released_assign_a_0_seconds)
         release_2 = deepcopy(mock_api_released_assign_b_0_seconds)
         release_3 = deepcopy(mock_api_released_assign_b_0_seconds)
-        release_3["timestamp"] = "2020-01-01 00:00:02.000000 UTC"
+        release_3["timestamp"] = "2020-01-01 00:00:02.000000 +0000"
 
         def api_request(*args, **kwargs):
             assert args[0] == ("assignments?course_id=no_course")
@@ -197,7 +197,7 @@ def test_list_normal_multiple_release_same_assignment(plugin_config, tmpdir):
                         }
                     ],
                     "path": "released/1/assign_a/foo",
-                    "timestamp": "2020-01-01 00:00:00.000000 UTC",
+                    "timestamp": "2020-01-01 00:00:00.000000 +0000",
                 },
                 {
                     "assignment_id": "assign_b",
@@ -213,7 +213,7 @@ def test_list_normal_multiple_release_same_assignment(plugin_config, tmpdir):
                         }
                     ],
                     "path": "released/1/assign_b/foo",
-                    "timestamp": "2020-01-01 00:00:02.000000 UTC",
+                    "timestamp": "2020-01-01 00:00:02.000000 +0000",
                 },
             ]
     finally:
@@ -231,7 +231,7 @@ def test_list_normal_multiple_released_same_assignment_bad_order(plugin_config, 
         release_1 = deepcopy(mock_api_released_assign_a_0_seconds)
         release_2 = deepcopy(mock_api_released_assign_b_0_seconds)
         release_3 = deepcopy(mock_api_released_assign_b_0_seconds)
-        release_2["timestamp"] = "2020-01-01 00:00:02.000000 UTC"
+        release_2["timestamp"] = "2020-01-01 00:00:02.000000 +0000"
 
         def api_request(*args, **kwargs):
             assert args[0] == ("assignments?course_id=no_course")
@@ -267,7 +267,7 @@ def test_list_normal_multiple_released_same_assignment_bad_order(plugin_config, 
                         }
                     ],
                     "path": "released/1/assign_a/foo",
-                    "timestamp": "2020-01-01 00:00:00.000000 UTC",
+                    "timestamp": "2020-01-01 00:00:00.000000 +0000",
                 },
                 {
                     "assignment_id": "assign_b",
@@ -283,7 +283,7 @@ def test_list_normal_multiple_released_same_assignment_bad_order(plugin_config, 
                         }
                     ],
                     "path": "released/1/assign_b/foo",
-                    "timestamp": "2020-01-01 00:00:02.000000 UTC",
+                    "timestamp": "2020-01-01 00:00:02.000000 +0000",
                 },
             ]
     finally:
@@ -304,7 +304,7 @@ def test_list_fetched(plugin_config, tmpdir):
 
         release_1 = deepcopy(mock_api_released_assign_a_0_seconds)
         fetch_1 = deepcopy(mock_api_fetched_assign_a_0_seconds)
-        fetch_1["timestamp"] = "2020-01-01 00:00:02.000000 UTC"
+        fetch_1["timestamp"] = "2020-01-01 00:00:02.000000 +0000"
 
         def api_request(*args, **kwargs):
             assert args[0] == ("assignments?course_id=no_course")
@@ -346,7 +346,7 @@ def test_list_fetched(plugin_config, tmpdir):
                         }
                     ],
                     "path": "released/1/assign_a/foo",
-                    "timestamp": "2020-01-01 00:00:00.000000 UTC",
+                    "timestamp": "2020-01-01 00:00:00.000000 +0000",
                 },
             ]
     finally:
@@ -371,7 +371,7 @@ def test_list_fetched_with_path_includes_course(plugin_config, tmpdir):
 
         release_1 = deepcopy(mock_api_released_assign_a_0_seconds)
         fetch_1 = deepcopy(mock_api_fetched_assign_a_0_seconds)
-        fetch_1["timestamp"] = "2020-01-01 00:00:02.000000 UTC"
+        fetch_1["timestamp"] = "2020-01-01 00:00:02.000000 +0000"
 
         def api_request(*args, **kwargs):
             assert args[0] == ("assignments?course_id=no_course")
@@ -413,7 +413,7 @@ def test_list_fetched_with_path_includes_course(plugin_config, tmpdir):
                         }
                     ],
                     "path": "released/1/assign_a/foo",
-                    "timestamp": "2020-01-01 00:00:00.000000 UTC",
+                    "timestamp": "2020-01-01 00:00:00.000000 +0000",
                 },
             ]
     finally:
@@ -434,7 +434,7 @@ def test_list_fetched_rerelease_ignored(plugin_config, tmpdir):
         release_1 = deepcopy(mock_api_released_assign_a_0_seconds)
         fetch_1 = deepcopy(mock_api_fetched_assign_a_0_seconds)
         release_2 = deepcopy(mock_api_released_assign_a_0_seconds)
-        release_2["timestamp"] = "2020-01-01 00:00:02.000000 UTC"
+        release_2["timestamp"] = "2020-01-01 00:00:02.000000 +0000"
 
         def api_request(*args, **kwargs):
             assert args[0] == ("assignments?course_id=no_course")
@@ -476,7 +476,7 @@ def test_list_fetched_rerelease_ignored(plugin_config, tmpdir):
                         }
                     ],
                     "path": "released/1/assign_a/foo",
-                    "timestamp": "2020-01-01 00:00:00.000000 UTC",
+                    "timestamp": "2020-01-01 00:00:00.000000 +0000",
                 },
             ]
     finally:
@@ -497,8 +497,8 @@ def test_list_multiple_fetch(plugin_config, tmpdir):
         release_1 = deepcopy(mock_api_released_assign_a_0_seconds)
         fetch_1 = deepcopy(mock_api_fetched_assign_a_0_seconds)
         fetch_2 = deepcopy(mock_api_fetched_assign_a_0_seconds)
-        fetch_1["timestamp"] = "2020-01-01 00:00:02.000000 UTC"
-        fetch_2["timestamp"] = "2020-01-01 00:00:02.000000 UTC"
+        fetch_1["timestamp"] = "2020-01-01 00:00:02.000000 +0000"
+        fetch_2["timestamp"] = "2020-01-01 00:00:02.000000 +0000"
 
         def api_request(*args, **kwargs):
             assert args[0] == ("assignments?course_id=no_course")
@@ -541,7 +541,7 @@ def test_list_multiple_fetch(plugin_config, tmpdir):
                         }
                     ],
                     "path": "released/1/assign_a/foo",
-                    "timestamp": "2020-01-01 00:00:00.000000 UTC",
+                    "timestamp": "2020-01-01 00:00:00.000000 +0000",
                 },
             ]
     finally:
@@ -599,7 +599,7 @@ def test_list_fetch_without_release_ignored(plugin_config, tmpdir):
                         }
                     ],
                     "path": "released/1/assign_a/foo",
-                    "timestamp": "2020-01-01 00:00:00.000000 UTC",
+                    "timestamp": "2020-01-01 00:00:00.000000 +0000",
                 },
             ]
     finally:

@@ -31,11 +31,17 @@ class ExchangeCollect(ABCExchangeCollect, NBExchange):
             self.log.error(f"Collect download failed: {response['value']}")
             self.fail(f"Collect download failed: {response['value']}")
 
+    # Note: this function needs to convert a datetime to a string in the same format as the timestamp_format, so
+    # that it can be compared with the submission timestamp from the exchange server.
+    # The submission timestamp is a string in the same format as timestamp_format.
     def _get_duedate(self):
         with Gradebook(self.coursedir.db_url, self.coursedir.course_id) as gb:
             try:
                 assignment = gb.find_assignment(self.coursedir.assignment_id)
-                return assignment.duedate
+                if type(assignment.duedate) is str:
+                    return assignment.duedate
+                else:
+                    return self.check_timezone(assignment.duedate).strftime(self.timestamp_format)
             except MissingEntry:
                 return None
 
