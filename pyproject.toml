@@ -28,7 +28,7 @@ dependencies = [
     "humanize==4.12.3",
     "psycopg2-binary>=2.9.9"
 ]
-dynamic = ["version", "description", "authors", "urls", "keywords"]
+dynamic = ["version", "description", "urls", "keywords"]
 authors = [
   {name = "Alasdair Macleod", email = "alasdair.j.macleod@ed.ac.uk"},
   {name = "Ian Stuart", email = "Ian.Stuart@ed.ac.uk"},
@@ -63,7 +63,7 @@ test = [
 source = "nodejs"
 
 [tool.hatch.metadata.hooks.nodejs]
-fields = ["description", "authors", "urls", "keywords"]
+fields = ["description", "urls", "keywords"]
 
 [tool.hatch.build.targets.sdist]
 artifacts = ["nbexchange_jlab/labextension"]
