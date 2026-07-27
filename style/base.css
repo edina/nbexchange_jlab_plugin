@@ -10,11 +10,6 @@
 
 .action-group {
   & > details {
-    border: var(--jp-inverse-border-color) 1px solid;
-    border-radius: 4px;
-    margin: 5px 0;
-    padding: 5px;
-
     summary {
       display: flex;
       justify-content: space-between;
