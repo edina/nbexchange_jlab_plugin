@@ -8,25 +8,19 @@
   display: none;
 }
 
-/* .nbex-alert-info {
-  color: var(--jp-info-color0);
-  background-color: var(--jp-info-color3);
-  border-color: var(--jp-info-color2);
-}
-
-.nbex-alert-warning {
-  color: var(--jp-warn-color0);
-  background-color: var(--jp-warn-color3);
-  border-color: var(--jp-warn-color2);
-}
-
 .action-group {
-  display: flex;
-  flex-direction: column;
-  padding: 10px 0;
-  border-top: var(--jp-inverse-border-color) 1px solid;
-  color: var(--jp-ui-font-color1);
-} */
+  & > details {
+    border: var(--jp-inverse-border-color) 1px solid;
+    border-radius: 4px;
+    margin: 5px 0;
+    padding: 5px;
+
+    summary {
+      display: flex;
+      justify-content: space-between;
+    }
+  }
+}
 
 .action-group:last-child {
   border-bottom: var(--jp-inverse-border-color) 1px solid;
@@ -48,8 +42,6 @@
 }
 
 .action-badge {
-  /* display: inline-block; */
-  float: right;
   min-width: 20px;
   padding: 2px;
   border-radius: 50%;
@@ -57,7 +49,8 @@
   text-align: center;
   background: var(--jp-brand-color1);
   color: var(--jp-ui-inverse-font-color0);
-  margin-left: 1em;
+  margin: 0 5px;
+  /* margin-left: 1em; */
 }
 
 #nbexchange-history-list {
