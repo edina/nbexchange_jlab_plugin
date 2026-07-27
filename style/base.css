@@ -4,17 +4,17 @@
     https://jupyterlab.readthedocs.io/en/stable/developer/css.html
 */
 
-.alert {
+.nbex-alert {
   display: none;
 }
 
-.alert-info {
+.nbex-alert-info {
   color: var(--jp-info-color0);
   background-color: var(--jp-info-color3);
   border-color: var(--jp-info-color2);
 }
 
-.alert-warning {
+.nbex-alert-warning {
   color: var(--jp-warn-color0);
   background-color: var(--jp-warn-color3);
   border-color: var(--jp-warn-color2);

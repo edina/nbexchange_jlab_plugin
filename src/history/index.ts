@@ -32,8 +32,8 @@ export class HistoryWidget extends Widget {
       '      </span>',
       '    </div>',
       '  </div>',
-      '  <div id="baautograde-alert-danger" role="alert" class="alert alert-danger"></div>',
-      '  <div id="baautograde-alert-info" role="alert" class="alert alert-info"></div>',
+      '  <div id="baautograde-alert-danger" role="alert" class="nbex-alert nbex-alert-danger"></div>',
+      '  <div id="baautograde-alert-info" role="alert" class="nbex-alert nbex-alert-info"></div>',
       '  <div class="panel-group" id="actions-panel-group">',
       '  </div>'
     ].join('\n');

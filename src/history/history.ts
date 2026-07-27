@@ -71,12 +71,12 @@ export class HistoryList {
 
   public clear_list(): void {
     this.panel_group_element.innerHTML = '';
-    let elem = this.widget.node.querySelector('.alert-danger') as HTMLElement;
+    let elem = this.widget.node.querySelector('.nbex-alert-danger') as HTMLElement;
     if (elem) {
       elem.innerHTML = '';
       elem.style.display = 'None';
     }
-    elem = this.widget.node.querySelector('.alert-info') as HTMLElement;
+    elem = this.widget.node.querySelector('.nbex-alert-info') as HTMLElement;
     if (elem) {
       elem.innerHTML = '';
       elem.style.display = 'None';
@@ -286,7 +286,7 @@ export class HistoryList {
 
   public show_error(message: string): void {
     const element = this.widget.node.getElementsByClassName(
-      'alert-danger'
+      'nbex-alert-danger'
     )[0] as HTMLElement;
     if (element) {
       element.innerHTML = message;
@@ -300,7 +300,7 @@ export class HistoryList {
 
   public show_info(message: string): void {
     const element = this.widget.node.getElementsByClassName(
-      'alert-info'
+      'nbex-alert-info'
     )[0] as HTMLElement;
     if (element) {
       element.innerHTML = message;
@@ -488,7 +488,7 @@ class Action {
     student: string,
     path: string
   ) {
-    const alert_area = document.querySelector('.alert-info') as HTMLElement;
+    const alert_area = document.querySelector('.nbex-alert-info') as HTMLElement;
     if (alert_area) {
       let data: any = null;
       try {
@@ -523,7 +523,7 @@ class Action {
     student: string,
     path: string
   ) {
-    const alert_area = document.querySelector('.alert-info') as HTMLElement;
+    const alert_area = document.querySelector('.nbex-alert-info') as HTMLElement;
     if (alert_area) {
       let data: any = null;
       try {
@@ -666,7 +666,7 @@ class Action {
 
   private show_error(message: string): void {
     const element = this.widget.node.getElementsByClassName(
-      'alert-danger'
+      'nbex-alert-danger'
     )[0] as HTMLElement;
     if (element) {
       element.innerHTML = message;

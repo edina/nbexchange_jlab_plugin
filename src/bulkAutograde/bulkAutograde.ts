@@ -320,7 +320,7 @@ export class AssignmentsList {
 
   public show_error(message: string): void {
     const element = this.widget.node.getElementsByClassName(
-      'alert-danger'
+      'nbex-alert-danger'
     )[0] as HTMLElement;
     if (element) {
       element.innerHTML = message;
