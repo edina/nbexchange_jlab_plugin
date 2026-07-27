@@ -4,23 +4,13 @@
     https://jupyterlab.readthedocs.io/en/stable/developer/css.html
 */
 
-.nbex-alert {
-  display: none;
-}
-
-.action-group {
-  & > details {
-    summary {
-      display: flex;
-      justify-content: space-between;
-    }
-  }
-}
-
 .action-group:last-child {
   border-bottom: var(--jp-inverse-border-color) 1px solid;
 }
 
+.action-group > details {
+  position: relative;
+}
 .action-row {
   display: flex;
   padding: 5px 0;
@@ -37,6 +27,8 @@
 }
 
 .action-badge {
+  position: absolute;
+  right: 0;
   min-width: 20px;
   padding: 2px;
   border-radius: 50%;
@@ -45,7 +37,6 @@
   background: var(--jp-brand-color1);
   color: var(--jp-ui-inverse-font-color0);
   margin: 0 5px;
-  /* margin-left: 1em; */
 }
 
 #nbexchange-history-list {
