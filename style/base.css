@@ -8,7 +8,7 @@
   display: none;
 }
 
-.nbex-alert-info {
+/* .nbex-alert-info {
   color: var(--jp-info-color0);
   background-color: var(--jp-info-color3);
   border-color: var(--jp-info-color2);
@@ -26,7 +26,7 @@
   padding: 10px 0;
   border-top: var(--jp-inverse-border-color) 1px solid;
   color: var(--jp-ui-font-color1);
-}
+} */
 
 .action-group:last-child {
   border-bottom: var(--jp-inverse-border-color) 1px solid;
