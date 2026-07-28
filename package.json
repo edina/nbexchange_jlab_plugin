@@ -1,6 +1,6 @@
 {
     "name": "nbexchange_jlab",
-    "version": "2.0.3",
+    "version": "2.0.4",
     "description": "A JupyterLab extension to add Noteable Look and Feel",
     "keywords": [
         "jupyter",
@@ -31,7 +31,7 @@
     ],
     "main": "lib/index.js",
     "types": "lib/index.d.ts",
-    "style": "style/index.css",
+    "style": "style/nbex_jlab.css",
     "repository": {
         "type": "git",
         "url": "https://github.com/WilliamPetit/nbexchange-jlab.git"
