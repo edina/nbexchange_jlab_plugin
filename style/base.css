@@ -8,13 +8,17 @@
   border-bottom: var(--jp-inverse-border-color) 1px solid;
 }
 
-.action-group > details {
-  position: relative;
+.action-group {
+  margin: 5px 0;
+  & > details {
+    position: relative;
+  }
 }
+
 .action-row {
   display: flex;
   padding: 5px 0;
-  border-top: var(--jp-inverse-border-color) 1px solid;
+  border-bottom: var(--jp-inverse-border-color) 1px solid;
 }
 
 .action-row:first-of-type {
@@ -36,7 +40,6 @@
   text-align: center;
   background: var(--jp-brand-color1);
   color: var(--jp-ui-inverse-font-color0);
-  margin: 0 5px;
 }
 
 #nbexchange-history-list {
