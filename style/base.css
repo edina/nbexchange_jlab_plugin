@@ -4,10 +4,6 @@
     https://jupyterlab.readthedocs.io/en/stable/developer/css.html
 */
 
-.action-group:last-child {
-  border-bottom: var(--jp-inverse-border-color) 1px solid;
-}
-
 .action-group {
   margin: 5px 0;
   & > details {
