@@ -38,6 +38,8 @@ class ExchangeCollect(ABCExchangeCollect, NBExchange):
         with Gradebook(self.coursedir.db_url, self.coursedir.course_id) as gb:
             try:
                 assignment = gb.find_assignment(self.coursedir.assignment_id)
+                if assignment.duedate is None:
+                    return None
                 if type(assignment.duedate) is str:
                     return assignment.duedate
                 else:

@@ -6,6 +6,7 @@
 
 .action-group {
   margin: 5px 0;
+
   & > details {
     position: relative;
   }
