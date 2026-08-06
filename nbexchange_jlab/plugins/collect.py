@@ -44,7 +44,8 @@ class ExchangeCollect(ABCExchangeCollect, NBExchange):
                     return assignment.duedate
                 else:
                     return self.check_timezone(assignment.duedate).strftime(self.timestamp_format)
-            except MissingEntry:
+            except MissingEntry as e:
+                self.log.info(f"Error occurred while trying to convert DueDate: {e}")
                 return None
 
     def do_collect(self):
