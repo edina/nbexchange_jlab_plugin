@@ -134,6 +134,8 @@ export class HistoryList {
     }
     this.clear_list();
 
+    const data_length = data.length;
+
     for (const key in data.reverse()) {
       const this_course = data[key];
       const assignments: IAssignmentData[] = this_course['assignments'];
@@ -170,6 +172,10 @@ export class HistoryList {
 
       const para_elem = document.createElement('summary');
       para_elem.setAttribute('id', top_level_summary_id);
+
+      if (data_length === 1) {
+        course_panel_elem.setAttribute('open', 'true');
+      }
 
       course_panel_elem.append(para_elem);
 
@@ -357,7 +363,7 @@ export class CourseList {
 
   private async load_list() {
     try {
-      this.history.load_list('moot');
+      this.history.load_list();
     } catch (reason) {
       const msg: string = 'Error on GET /BaAssignment.\n' + reason;
       this.show_error(msg);
