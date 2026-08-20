@@ -113,6 +113,8 @@ class HistoryList(BaseListerClass):
             try:
                 if course_id:
                     config.CourseDirectory.course_id = course_id
+                else:
+                    config.CourseDirectory.course_id = get_current_course()
 
                 coursedir = CourseDirectory(config=config)
                 authenticator = Authenticator(config=config)
