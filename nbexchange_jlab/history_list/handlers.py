@@ -86,18 +86,10 @@ class HistoryList(BaseListerClass):
         if not history["success"]:
             raise HistoryError(f"Error message from exchange: '{history['value']}'")
 
-        currnent_course_code = get_current_course()
+        current_course_code = get_current_course()
 
         for item in history["value"]:
-            if item["course_code"] == currnent_course_code:
-                item["isCurrent"] = True
-            else:
-                item["isCurrent"] = False
-
-        currnent_course_code = get_current_course()
-
-        for item in history["value"]:
-            if item["course_code"] == currnent_course_code:
+            if item["course_code"] == current_course_code:
                 item["isCurrent"] = True
             else:
                 item["isCurrent"] = False
@@ -107,7 +99,7 @@ class HistoryList(BaseListerClass):
     def list_history(self, course_id: str = None) -> Dict | str | Exception:
         if not get_current_course():
             return {"success": False, "value": "You need to have a current course code."}
-
+        self.log.info(f"Listing history for course_id {course_id} (current course is {get_current_course()})")
         with self.yield_config() as config:
 
             try:
