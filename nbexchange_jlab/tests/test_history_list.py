@@ -451,3 +451,43 @@ def test_list_history_query_exchange_times_out(monkeypatch):
 
     assert data["success"] is False
     assert "Traceback (most recent call last):" in data["value"]
+
+
+def test_lazy_history_proxies_resource_and_query(monkeypatch):
+    response_data = {"success": True, "items": [{"id": 1}]}
+    response = type(
+        "Request",
+        (object,),
+        {"status_code": 200, "json": lambda self: response_data},
+    )()
+    plugin = HistoryList()
+    monkeypatch.setenv("NAAS_COURSE_ID", "my_course_code")
+
+    with patch.object(Exchange, "api_request", return_value=response) as api_request:
+        data = plugin.lazy_history("assignments/80/actions", "limit=100&action=submitted")
+
+    assert data == response_data
+    api_request.assert_called_once_with("history/assignments/80/actions?limit=100&action=submitted")
+
+
+def test_lazy_history_handles_timeout(monkeypatch):
+    plugin = HistoryList()
+    monkeypatch.setenv("NAAS_COURSE_ID", "my_course_code")
+
+    with patch.object(Exchange, "api_request", side_effect=requests.exceptions.Timeout):
+        data = plugin.lazy_history("courses")
+
+    assert data == {
+        "success": False,
+        "value": "Timed out trying to reach the exchange service to list history.",
+    }
+
+
+def test_lazy_history_rejects_unknown_resource():
+    plugin = HistoryList()
+
+    with patch.object(Exchange, "api_request") as api_request:
+        data = plugin.lazy_history("../assignment")
+
+    assert data == {"success": False, "value": "Invalid history resource."}
+    api_request.assert_not_called()

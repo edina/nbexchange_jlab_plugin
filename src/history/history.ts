@@ -11,12 +11,13 @@ interface IActionType {
 }
 
 const actionTypes: IActionType[] = [
-  { id: 'AssignmentActions.released', display: 'Released' },
-  { id: 'AssignmentActions.fetched', display: 'Fetched' },
-  { id: 'AssignmentActions.submitted', display: 'Submitted' },
-  { id: 'AssignmentActions.collected', display: 'Collected' },
-  { id: 'AssignmentActions.feedback_released', display: 'Feedback Released' },
-  { id: 'AssignmentActions.feedback_fetched', display: 'Feedback Fetched' }
+  { id: 'released', display: 'Released' },
+  { id: 'fetched', display: 'Fetched' },
+  { id: 'submitted', display: 'Submitted' },
+  { id: 'removed', display: 'Removed' },
+  { id: 'collected', display: 'Collected' },
+  { id: 'feedback_released', display: 'Feedback Released' },
+  { id: 'feedback_fetched', display: 'Feedback Fetched' }
 ];
 
 interface IActionData {
@@ -28,30 +29,38 @@ interface IActionData {
 
 // `foo?:` indicates a field that may not be present
 interface IActionSummaryData {
-  released: number;
-  fetched?: number;
-  submitted?: number;
-  collected?: number;
-  feedback_released?: number;
-  feedback_fetched?: number;
+  [action: string]: number;
 }
 
 interface IAssignmentData {
-  assignment_id: number;
-  assignment_code: string;
-  actions: IActionData[];
+  id: number;
+  code: string;
   action_summary: IActionSummaryData;
+  first_action_at: string | null;
+  last_action_at: string | null;
 }
 
 interface ICourseData {
-  role: { Instructor?: number; Student?: number };
-  user_id: any;
-  assignments: IAssignmentData[];
-  isInstructor: boolean;
-  isCurrent: boolean;
-  course_id: number;
-  course_code: string;
-  course_title: string;
+  id: number;
+  code: string;
+  title: string;
+  roles: string[];
+  is_instructor: boolean;
+  is_current: boolean;
+  assignment_count: number;
+}
+
+interface IListResponse<T> {
+  success: boolean;
+  items?: T[];
+  value?: string;
+  roles?: string[];
+  is_instructor?: boolean;
+}
+
+interface IActionPage extends IListResponse<IActionData> {
+  next_cursor: string | null;
+  snapshot: string;
 }
 
 export class HistoryList {
@@ -97,190 +106,116 @@ export class HistoryList {
     return `${year}-${month}-${day}`;
   }
 
-  private load_list_success(data: ICourseData[]): void {
-    if (data === null) {
-      this.show_info(
-        '<p>There is no history available from the Exchange service</p>'
-      );
-      return;
-    }
-    if (typeof data !== 'object') {
-      this.show_error(
-        '<p>HistoryList.load_list() failed with success not true:</p>\n<pre>' +
-          String(data) +
-          '</pre>'
-      );
-      return;
-    }
-    if (data.length === 0) {
-      this.show_info(
-        '<p>There is zero history available from the Exchange service'
-      );
-      return;
-    }
-    if (data.length === 1) {
-      for (const key in data) {
-        const this_course = data[key];
-        if (!('assignments' in this_course)) {
-          this.show_info('<p>There is no history to show you</p>');
-          return;
-        }
-        const assignments: IAssignmentData[] = this_course['assignments'];
-        if (assignments.length === 0) {
-          this.show_info('<p>There is no history to show you</p>');
-          return;
-        }
-      }
-    }
+  public async load_list(): Promise<void> {
     this.clear_list();
-
-    for (const key in data.reverse()) {
-      const this_course = data[key];
-      const assignments: IAssignmentData[] = this_course['assignments'];
-
-      if (assignments.length === 0) {
-        continue;
-      }
-
-      let isCurrent = false;
-      if (this_course['isCurrent']) {
-        isCurrent = true;
-      }
-      let first_date: string = this.formatDate(new Date()); // today
-      let latest_date: string = this.formatDate(new Date(2000, 1, 1)); // yonks back
-      const role = this_course['isInstructor'] ? 'Instructor' : 'Student';
-      const detail_group_name = this_course['course_code'];
-
-      const course_panel_elem = document.createElement('details');
-
-      // if this is the current course prepended, else appended
-      if (isCurrent) {
-        this.panel_group_element.prepend(course_panel_elem);
-      } else {
-        this.panel_group_element.append(course_panel_elem);
-      }
-
-      course_panel_elem.setAttribute('name', 'course_level_group');
-      course_panel_elem.classList.add('course_group');
-      if (isCurrent) {
-        course_panel_elem.classList.add('current_course');
-      }
-      const top_level_summary_id = 'course_id_' + this_course['course_id'];
-      course_panel_elem.setAttribute('aria-labelledby', top_level_summary_id);
-
-      const para_elem = document.createElement('summary');
-      para_elem.setAttribute('id', top_level_summary_id);
-
-      course_panel_elem.append(para_elem);
-
-      para_elem.textContent +=
-        this_course['course_title'] + ' (' + detail_group_name + ')';
-
-      for (const assignment of assignments) {
-        const assignment_code = assignment['assignment_code'];
-        const assignment_id = assignment['assignment_id'];
-
-        // Create assignment panel
-        const assignment_panel_elem = document.createElement('details');
-        assignment_panel_elem.classList.add(
-          'panel',
-          'panel-default',
-          'panel_radiused'
-        );
-        assignment_panel_elem.setAttribute('name', detail_group_name);
-        const panel_body_id = 'assignment-panel-body-' + assignment_id;
-        const assignment_level_summary_id =
-          'assignment_level_summary_' + assignment_id;
-
-        assignment_panel_elem.innerHTML = [
-          '      <summary class="panel-heading" id="' +
-            assignment_level_summary_id +
-            '">' +
-            assignment_code +
-            ' &lt;' +
-            role +
-            '&gt;',
-          '      </summary>',
-          '      <div class="panel-body" id="' + panel_body_id + '">',
-          '      </div>'
-        ].join('\n');
-        assignment_panel_elem.setAttribute(
-          'aria-labelledby',
-          assignment_level_summary_id
-        );
-
-        course_panel_elem.append(assignment_panel_elem);
-
-        const actions: IActionData[] = assignment['actions'];
-
-        // Try and get 1st & last dates
-        for (const action of actions) {
-          const this_date = this.formatDate(new Date(action['timestamp']));
-          if (this_date < first_date) {
-            first_date = this_date;
-          }
-          if (this_date > latest_date) {
-            latest_date = this_date;
-          }
-        }
-
-        for (let j = 0; j < actionTypes.length; j++) {
-          const groupActions: any[] = actions.filter(
-            a => a.action === actionTypes[j].id
-          );
-
-          // Add group in panel_body_id
-          new ActionGroup(
-            this.widget,
-            assignment_panel_elem,
-            panel_body_id,
-            this_course['course_code'],
-            isCurrent,
-            role,
-            assignment_code,
-            actionTypes[j].display,
-            groupActions
-          );
-        }
-      }
-
-      // Update the course name string to includes dates
-      para_elem.textContent += ' - ' + first_date + ' -> ' + latest_date;
-      if (this_course['isCurrent']) {
-        para_elem.textContent += ' (current course)';
-      }
-    }
-  }
-
-  // eslint-disable-next-line @typescript-eslint/ban-types
-  public async load_list(course?: string) {
-    this.clear_list();
-    let data: any = null;
+    this.show_info('<p>Loading courses…</p>');
     try {
-      data = await requestAPI<any>('history?course_id=' + course);
-    } catch (reason) {
-      console.error('load_list caught error:', reason);
-      const msg: string = `Error on GET /history.\n${reason}`;
-      this.show_error('<p>' + msg + '</p>');
-      return;
-    }
-
-    if (data.success) {
-      this.load_list_success(<any[]>data.value);
-    } else {
-      if (typeof data === 'string') {
+      const data =
+        await requestAPI<IListResponse<ICourseData>>('history/courses');
+      if (!data.success) {
         this.show_error(
-          '<p>HistoryList.load_list() failed with string:</p>\n<pre>' +
-            data +
-            '</pre>'
+          '<p>' + (data.value || 'Unable to load courses') + '</p>'
         );
         return;
       }
-      this.show_error(
-        '<p>HistoryList.load_list() failed with success not true:</p>\n<pre>' +
-          data.value +
-          '</pre>'
+      this.clear_list();
+      const courses = data.items || [];
+      if (courses.length === 0) {
+        this.show_info('<p>There is no history to show you</p>');
+        return;
+      }
+      courses
+        .slice()
+        .sort((a, b) => Number(b.is_current) - Number(a.is_current))
+        .forEach(course => this.renderCourse(course));
+    } catch (reason) {
+      console.error('load_list caught error:', reason);
+      const msg: string = `Error on GET /history/courses.\n${reason}`;
+      this.show_error('<p>' + msg + '</p>');
+    }
+  }
+
+  private renderCourse(course: ICourseData): void {
+    const panel = document.createElement('details');
+    panel.classList.add('course_group');
+    if (course.is_current) {
+      panel.classList.add('current_course');
+    }
+    const summary = document.createElement('summary');
+    summary.textContent = `${course.title || course.code} (${course.code}) — ${course.assignment_count} assignments`;
+    if (course.is_current) {
+      summary.textContent += ' (current course)';
+    }
+    const body = document.createElement('div');
+    body.classList.add('history-course-body');
+    panel.append(summary, body);
+    this.panel_group_element.append(panel);
+
+    panel.addEventListener('toggle', () => {
+      if (
+        panel.open &&
+        panel.dataset.loaded !== 'true' &&
+        panel.dataset.loading !== 'true'
+      ) {
+        panel.dataset.loading = 'true';
+        void this.loadAssignments(course, body).then(loaded => {
+          panel.dataset.loading = 'false';
+          panel.dataset.loaded = String(loaded);
+        });
+      }
+    });
+  }
+
+  private async loadAssignments(
+    course: ICourseData,
+    body: HTMLDivElement
+  ): Promise<boolean> {
+    body.textContent = 'Loading assignments…';
+    try {
+      const data = await requestAPI<IListResponse<IAssignmentData>>(
+        `history/courses/${course.id}/assignments`
       );
+      if (!data.success) {
+        body.textContent = data.value || 'Unable to load assignments';
+        return false;
+      }
+      body.innerHTML = '';
+      const assignments = data.items || [];
+      if (assignments.length === 0) {
+        body.textContent = 'There are no active assignments for this course.';
+        return true;
+      }
+      const role = data.is_instructor ? 'Instructor' : 'Student';
+      assignments.forEach(assignment => {
+        const panel = document.createElement('details');
+        panel.classList.add('panel', 'panel-default', 'panel_radiused');
+        const summary = document.createElement('summary');
+        summary.classList.add('panel-heading');
+        summary.textContent = `${assignment.code} <${role}>`;
+        const assignmentBody = document.createElement('div');
+        assignmentBody.classList.add('panel-body');
+        panel.append(summary, assignmentBody);
+        body.append(panel);
+
+        actionTypes.forEach(actionType => {
+          const count = assignment.action_summary[actionType.id] || 0;
+          if (count > 0) {
+            new ActionGroup(
+              this.widget,
+              assignmentBody,
+              course,
+              assignment,
+              role,
+              actionType,
+              count
+            );
+          }
+        });
+      });
+      return true;
+    } catch (reason) {
+      body.textContent = `Unable to load assignments: ${reason}`;
+      return false;
     }
   }
 
@@ -340,24 +275,15 @@ export class CourseList {
 
     this.data = [];
 
-    // eslint-disable-next-line @typescript-eslint/no-this-alias
-    const that = this;
-    that.load_list();
-
-    this.refresh_element!.onclick = function () {
-      that.load_list();
+    void this.load_list();
+    this.refresh_element!.onclick = () => {
+      void this.load_list();
     };
-
-    this.bind_events();
-  }
-
-  private bind_events(): void {
-    this.refresh_element!.click();
   }
 
   private async load_list() {
     try {
-      this.history.load_list('moot');
+      await this.history.load_list();
     } catch (reason) {
       const msg: string = 'Error on GET /BaAssignment.\n' + reason;
       this.show_error(msg);
@@ -371,82 +297,119 @@ export class CourseList {
 
 class ActionGroup {
   widget: Widget;
+  private course: ICourseData;
+  private assignment: IAssignmentData;
+  private role: string;
+  private actionType: IActionType;
+  private row: HTMLDetailsElement;
+  private actionsElement: HTMLDivElement;
+  private loadMoreButton: HTMLButtonElement;
+  private cursor: string | null = null;
+  private snapshot: string | null = null;
+  private loaded = false;
+  private loading = false;
+
   constructor(
     widget: Widget,
-    panel_elem: HTMLElement,
-    parent: string,
-    course_code: string,
-    isCurrent: boolean,
+    parent: HTMLElement,
+    course: ICourseData,
+    assignment: IAssignmentData,
     role: string,
-    assignment_code: string,
-    action_type: string,
-    actions: IActionData[]
+    actionType: IActionType,
+    count: number
   ) {
     this.widget = widget;
-    const element: HTMLDivElement = document.createElement('div');
+    this.course = course;
+    this.assignment = assignment;
+    this.role = role;
+    this.actionType = actionType;
+    const element = document.createElement('div');
     element.classList.add('action-group');
-    this.make_row(
-      element,
-      course_code,
-      isCurrent,
-      role,
-      assignment_code,
-      action_type,
-      actions
-    );
-    const div_elements = panel_elem.getElementsByTagName('div');
-    const parent_elem = <HTMLDivElement>div_elements.namedItem(parent);
-    parent_elem.append(element);
-  }
-
-  private make_row(
-    element: HTMLDivElement,
-    course_code: string,
-    isCurrent: boolean,
-    role: string,
-    assignment_code: string,
-    action_type: string,
-    actions: IActionData[]
-  ): void {
-    const action_count = String(actions.length);
-
-    const row = document.createElement('details');
+    this.row = document.createElement('details');
     const summary = document.createElement('summary');
-
     const count_span = document.createElement('span');
     count_span.classList.add('action-badge');
-    count_span.innerText = action_count;
-
-    summary.innerText = action_type;
+    count_span.innerText = String(count);
+    summary.innerText = actionType.display;
     summary.append(count_span);
-    row.append(summary);
-    row.setAttribute(
+    this.row.append(summary);
+    this.row.setAttribute(
       'aria-label',
-      'Course: ' +
-        course_code +
-        ', Assignment: ' +
-        assignment_code +
-        ', Action: ' +
-        action_type +
-        ', Count: ' +
-        action_count +
-        ' times'
+      `Course: ${course.code}, Assignment: ${assignment.code}, Action: ${actionType.display}, Count: ${count} times`
     );
-    for (let i = 0; i < actions.length; i++) {
-      new Action(
-        this.widget,
-        row,
-        course_code,
-        isCurrent,
-        assignment_code,
-        role,
-        action_type,
-        i,
-        actions[i]
-      );
-    }
+    this.actionsElement = document.createElement('div');
+    this.loadMoreButton = document.createElement('button');
+    this.loadMoreButton.classList.add(
+      'btn',
+      'btn-default',
+      'history-load-more'
+    );
+    this.loadMoreButton.textContent = 'Load more';
+    this.loadMoreButton.style.display = 'none';
+    this.loadMoreButton.onclick = () => void this.loadPage();
+    this.row.append(this.actionsElement, this.loadMoreButton);
+    this.row.addEventListener('toggle', () => {
+      if (this.row.open && !this.loaded) {
+        void this.loadPage().then(loaded => {
+          this.loaded = loaded;
+        });
+      }
+    });
+    element.append(this.row);
+    parent.append(element);
+  }
 
-    element.append(row);
+  private async loadPage(): Promise<boolean> {
+    if (this.loading) {
+      return false;
+    }
+    this.loading = true;
+    this.loadMoreButton.disabled = true;
+    const params = new URLSearchParams({
+      action: this.actionType.id,
+      limit: '100'
+    });
+    if (this.cursor) {
+      params.set('cursor', this.cursor);
+    }
+    if (this.snapshot) {
+      params.set('snapshot', this.snapshot);
+    }
+    try {
+      const data = await requestAPI<IActionPage>(
+        `history/assignments/${this.assignment.id}/actions?${params.toString()}`
+      );
+      if (!data.success) {
+        throw new Error(data.value || 'Unable to load actions');
+      }
+      const actions = data.items || [];
+      actions.forEach((action, index) => {
+        new Action(
+          this.widget,
+          this.actionsElement,
+          this.course.code,
+          this.course.is_current,
+          this.assignment.code,
+          this.role,
+          this.actionType.display,
+          index,
+          action
+        );
+      });
+      this.cursor = data.next_cursor;
+      this.snapshot = data.snapshot;
+      this.loadMoreButton.style.display = this.cursor ? 'inline-block' : 'none';
+      return true;
+    } catch (reason) {
+      const error = document.createElement('p');
+      error.classList.add('history-load-error');
+      error.textContent = `Unable to load actions: ${reason}`;
+      this.actionsElement.append(error);
+      return false;
+    } finally {
+      this.loading = false;
+      this.loadMoreButton.disabled = false;
+    }
   }
 }
 

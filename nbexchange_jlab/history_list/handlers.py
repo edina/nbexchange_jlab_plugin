@@ -3,6 +3,7 @@
 import contextlib
 import json
 import os
+import re
 import shutil
 import traceback
 from typing import Dict, List
@@ -140,6 +141,36 @@ class HistoryList(BaseListerClass):
                 retvalue = {"success": True, "value": history}
 
         return retvalue
+
+    def lazy_history(self, resource: str, query: str = "") -> Dict:
+        """Proxy a bounded lazy-history request through the configured Exchange."""
+        if not re.fullmatch(r"(?:courses|courses/[0-9]+/assignments|assignments/[0-9]+/actions)", resource):
+            return {"success": False, "value": "Invalid history resource."}
+        if not get_current_course():
+            return {"success": False, "value": "You need to have a current course code."}
+
+        with self.yield_config() as config:
+            try:
+                coursedir = CourseDirectory(config=config)
+                authenticator = Authenticator(config=config)
+                self.exchange = Exchange(coursedir=coursedir, authenticator=authenticator, config=config)
+                path = f"history/{resource}"
+                if query:
+                    path = f"{path}?{query}"
+                response = self.exchange.api_request(path)
+                if response.status_code >= 400:
+                    raise HistoryError(response.reason)
+                data = response.json()
+                if not isinstance(data, dict) or "success" not in data:
+                    raise HistoryError(f"Invalid response from the exchange: {data}")
+                return data
+            except requests.exceptions.Timeout:
+                return {"success": False, "value": "Timed out trying to reach the exchange service to list history."}
+            except (HistoryError, ValueError) as error:
+                return {"success": False, "value": str(error)}
+            except Exception:
+                self.log.error(traceback.format_exc())
+                return {"success": False, "value": "Unable to load history from the exchange service."}
 
     def _setup_download(
         self, config: dict, course_code: str = None, assignment_code: str = None, student: str = None
@@ -284,6 +315,13 @@ class HistoryListHandler(BaseHistoryHandler):
         self.finish(json.dumps(self.manager.list_history(course_id=course_id)))
 
 
+class LazyHistoryHandler(BaseHistoryHandler):
+
+    @web.authenticated
+    def get(self, resource):
+        self.finish(json.dumps(self.manager.lazy_history(resource=resource, query=self.request.query)))
+
+
 class HiCollectAssignmentHandler(BaseHistoryHandler):
 
     @web.authenticated
@@ -325,6 +363,7 @@ def setup_handlers(web_app):
 
     base_url = web_app.settings["base_url"]
     default_handlers = [
+        (r"history/(.*)", LazyHistoryHandler),
         (r"history", HistoryListHandler),
         (r"hisCollect", HiCollectAssignmentHandler),
         (r"hisDownload", HiDownloadHandler),
