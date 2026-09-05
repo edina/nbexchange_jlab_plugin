@@ -94,14 +94,6 @@ class HistoryList(BaseListerClass):
             else:
                 item["isCurrent"] = False
 
-        currnent_course_code = get_current_course()
-
-        for item in history["value"]:
-            if item["course_code"] == currnent_course_code:
-                item["isCurrent"] = True
-            else:
-                item["isCurrent"] = False
-
         return history["value"]
 
     def list_history(self, course_id: str = None) -> Dict | str | Exception:
@@ -267,7 +259,7 @@ class HistoryList(BaseListerClass):
 
 
 class BaseHistoryHandler(JupyterHandler):
-    api_timeout = 10
+    api_timeout = 30
 
     base_service_url = os.environ.get("NAAS_BASE_URL", "https://noteable.edina.ac.uk/exchange")
 

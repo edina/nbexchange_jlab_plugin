@@ -117,6 +117,7 @@ class Exchange(ABCExchange):
         self.log.debug(f"Exchange.api_request calling exchange with url {url}")
 
         if method == "GET":
+            self.log.info(f"Exchange.api_request GET has a timeout of {self.api_timeout} seconds")
             get_req = partial(
                 requests.get,
                 url,

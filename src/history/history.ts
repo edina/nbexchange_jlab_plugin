@@ -342,7 +342,7 @@ export class CourseList {
 
     // eslint-disable-next-line @typescript-eslint/no-this-alias
     const that = this;
-    that.load_list();
+    // that.load_list();
 
     this.refresh_element!.onclick = function () {
       that.load_list();
