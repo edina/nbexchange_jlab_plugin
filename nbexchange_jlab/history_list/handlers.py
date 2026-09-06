@@ -55,6 +55,7 @@ class HistoryList(BaseListerClass):
         """
 
         try:
+            self.exchange.api_timeout = 30 # seconds
             if self.exchange.coursedir.course_id:
                 """List history for specific course"""
                 self.log.info(f"calling exchange.api_request with course_code {self.exchange.coursedir.course_id}")
